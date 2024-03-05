@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-#scale=1">
+    <title>Apple I</title>
+    <link rel="stylesheet" href="./res/style.css">
+    <link rel="icon" href="./res/favicon.ico" type="image/x-icon">
+</head>
+<body>
+
+<div class="text-center">
+    <div id="screen-holder">
+        <canvas id="screen"></canvas>
+    </div>
+</div>
+
+<script type="module">
+    import {Screen} from "./src/screen.mjs";
+
+    let scale = 3;
+
+    const canvasElm = document.getElementById("screen");
+    const screen    = new Screen(canvasElm, scale);
+
+    const content = "" +
+`                APPLE 1
+
+            SCREEN EMULATOR
+
+         CLEAR SCREEN: CTRL + L
+         ZOOM IN     : CTRL + +
+         ZOOM OUT    : CTRL + -
+         ZOOM RESET  : CTRL + 0
+
+CHARACTER SET:
+
+`.replaceAll("\n", "\r");
+
+    for (const character of content)
+        screen.print(character);
+
+    // noinspection SpellCheckingInspection
+    const charset = " !\"#$%&'()*+,-./0123456789:;<=>?\r@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_";
+    for (const character of charset)
+        screen.print(character);
+
+    screen.print("\r");
+    screen.print("\r");
+
+    // bound to keypress
+    window.addEventListener("keydown", function(event) {
+        // Clear the screen Ctrl+L
+        if (event.ctrlKey && event.key === "l") {
+            event.preventDefault();
+            screen.clear();
+            return;
+        }
+
+        // Zoom in Ctrl+"+"
+        if (event.ctrlKey && (event.key === "+" || event.key === "=")) {
+            event.preventDefault();
+            scale += 1;
+            screen.setScale(scale);
+            return;
+        }
+
+        // Zoom out Ctrl+"-"
+        if (event.ctrlKey && event.key === "-") {
+            event.preventDefault();
+            if (scale === 1) return;
+            scale -= 1;
+            screen.setScale(scale);
+            return;
+        }
+
+        // Zoom reset Ctrl+"0"
+        if (event.ctrlKey && event.key === "0") {
+            event.preventDefault();
+            if (scale === 3) return;
+            scale = 3;
+            screen.setScale(scale);
+            return;
+        }
+
+        const character = event.key === "Enter" ? "\r" : event.key.toUpperCase();
+        if (charset.includes(character))
+            screen.print(character);
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "aplle-canvas",
+  "version": "1.0.0",
+  "description": "Screen for Apple 1",
+  "main": "",
+  "scripts": {
+    "test": "node --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git"
+  },
+  "keywords": [
+    "aplle-1",
+    "terminal"
+  ],
+  "author": "PopovMP",
+  "license": "ISC"
+}
