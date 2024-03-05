@@ -46,9 +46,7 @@ export class ScreenBuffer {
      */
     print(character) {
         if (character === "\r") {
-            // Delete the cursor
-            this.#screenBuffer[this.#bufferIndex] = " ";
-            // Move cursor over the current line
+            // Move the index to the end of the line
             this.#bufferIndex += this.#COLS - this.#bufferIndex % this.#COLS - 1;
         } else {
             // Set the character
@@ -58,6 +56,7 @@ export class ScreenBuffer {
         if (this.#bufferIndex === this.#screenBuffer.length - 1)
             this.#scrollBuffer();
 
+        // Increment the index
         this.#bufferIndex += 1;
     }
 
@@ -86,11 +85,15 @@ export class ScreenBuffer {
      * @return {void}
      */
     #scrollBuffer() {
+        // Shift the buffer data one row upwards
         for (let i = this.#COLS; i < this.#screenBuffer.length; i += 1)
             this.#screenBuffer[i - this.#COLS] = this.#screenBuffer[i];
+
+        // Empty the last line
         for (let i = this.#screenBuffer.length - this.#COLS; i < this.#screenBuffer.length; i += 1)
             this.#screenBuffer[i] = " ";
 
+        // Set the index to the beginning of the last line
         this.#bufferIndex = this.#screenBuffer.length - this.#COLS - 1;
     }
 }
